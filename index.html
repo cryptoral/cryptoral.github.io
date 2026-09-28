@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matematica din spatele Crypto: Poveste de Liceu și Monitorizare Live Sortabilă</title>
+<meta name="description" content="Matematica din spatele crypto explicată printr-o poveste de liceu: progresii geometrice, probabilități și analiză CVD. Tabel live sortabil pentru monitorizare.">
+<style>
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;background-color:#f4f6f9;padding:20px;display:flex;flex-direction:column;align-items:center;margin:0}
+h2{text-align:center;margin:8px 0}
+.table-container{width:95%;max-width:1500px;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.08);border-radius:8px;overflow:hidden;margin-top:20px}
+table{border-collapse:collapse;width:100%;table-layout:fixed}
+th,td{padding:14px 16px;text-align:left;border-bottom:1px solid #eee;vertical-align:middle}
+th{background-color:#059669;color:#fff;cursor:pointer;user-select:none;transition:background .2s;white-space:nowrap;font-size:.92em}
+th:hover{background-color:#047857}
+th::after{content:' \2195';font-size:.8em;color:rgba(255,255,255,.6)}
+tbody tr:nth-child(odd){background-color:#f9fafb}
+tbody tr{height:88px}
+@media (hover:hover) and (pointer:fine){tbody tr:hover{background-color:#ecfdf5}}
+.positive{color:#16a34a;font-weight:bold}
+.negative{color:#dc3545;font-weight:bold}
+.neutral{color:#6c757d}
+.rank{color:#6b7280;font-weight:600;font-size:.9em;text-align:center}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.crypto-container{display:flex;align-items:center;min-width:0}
+.crypto-icon-wrap{position:relative;width:34px;height:34px;margin-right:12px;flex-shrink:0;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.crypto-icon{width:100%;height:100%;object-fit:contain;display:block}
+.crypto-name{font-weight:600;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vol-main{font-weight:600;color:#111827;font-variant-numeric:tabular-nums}
+.badge{display:inline-block;margin-left:6px;padding:3px 8px;border-radius:4px;font-size:.78em;font-weight:700;white-space:nowrap}
+.badge-vol-high{background:#dcfce7;color:#15803d}
+.badge-vol-low{background:#f3f4f6;color:#6b7280}
+.badge-cvd-buy{background:#dcfce7;color:#15803d}
+.badge-cvd-sell{background:#fee2e2;color:#b91c1c}
+.badge-cvd-neutral{background:#f3f4f6;color:#6b7280}
+.cvd-cell{overflow:hidden}
+.cvd-detail{margin-top:5px;font-size:.8em;color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.cvd-detail .buy{color:#16a34a;font-weight:600}
+.cvd-detail .sell{color:#dc3545;font-weight:600}
+.cvd-detail .sep{color:#9ca3af;margin:0 5px}
+.whale-line{margin-top:3px;font-size:.8em;color:#6b7280;white-space:nowrap}
+.whale-line .wb{color:#16a34a;font-weight:600}
+.whale-line .ws{color:#dc3545;font-weight:600}
+.instruction{color:#5f6368;font-size:.9em;margin-top:5px;text-align:center;max-width:950px;padding:0 10px}
+.mobile-sort{display:none;margin-top:15px;width:95%;max-width:1500px}
+.mobile-sort label{font-weight:600;color:#374151;margin-right:8px}
+.mobile-sort select{padding:8px 12px;border-radius:6px;border:1px solid #d1d5db;font-size:1em;background:#fff}
+.mobile-sort .dir-btn{margin-left:8px;padding:8px 12px;border-radius:6px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:1em}
+@media(max-width:1100px){
+body{padding:10px}
+.table-container{width:100%;box-shadow:none;background:transparent;margin-top:10px;border-radius:0}
+table,thead,tbody,tr,td{display:block;width:100%}
+table{table-layout:auto}
+thead{display:none}
+tbody tr{margin-bottom:14px;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.05);height:auto}
+tbody tr:nth-child(odd){background-color:#f9fafb}
+td{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #f3f4f6;text-align:right;gap:16px;min-height:44px}
+td:last-child{border-bottom:none}
+td::before{content:attr(data-label);font-weight:600;color:#6b7280;font-size:.85em;text-align:left;flex-shrink:0;padding-right:8px}
+td.td-crypto{background:#ecfdf5;border-bottom:2px solid #d1fae5;justify-content:flex-start;padding:14px 16px}
+td.td-crypto::before{content:none}
+td.td-rank{padding:8px 16px;font-size:.85em;background:#f3f4f6}
+td.td-rank::before{content:none}
+td.td-rank::after{content:'rank';color:#9ca3af;font-size:.8em;font-weight:600;margin-left:6px}
+.cvd-cell{display:flex;flex-direction:column;align-items:flex-end;text-align:right;height:auto;gap:4px}
+.cvd-cell::before{align-self:flex-start}
+.cvd-detail,.whale-line{margin-top:0}
+.mobile-sort{display:block}
+}
+@media (max-width: 600px) {
+    .marian-article {
+        padding: 16px !important;
+        border-radius: 8px !important;
+        font-size: 15px !important;
+    }
+    .marian-article h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 18px !important;
+        padding-bottom: 10px !important;
+    }
+    .marian-article h3 {
+        font-size: 1.15rem !important;
+    }
+    .marian-article .marian-img {
+        float: none !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        max-width: 350px !important;
+        margin: 12px auto !important;
+    }
+}
+</style>
+</head>
+<body>
+<div class="marian-article" style="max-width: 800px; margin: 0 auto; background-color: #ffffff; color: #2d3748; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <h1 style="font-size: 2.2rem; color: #2c7a7b; text-align: center; margin-bottom: 30px; line-height: 1.3; border-bottom: 2px solid #e6fffa; padding-bottom: 15px;">
+        Balene, Procente și Cum l-a salvat Bitcoin pe Marian de la <span style="color: #dd6b20;">nota 4 la BAC</span>
+    </h1>
+    <p>Faceți cunoștință cu <strong>Marian</strong>, elev în clasa a XII-a la profilul Tehnologic, are două mari pasiuni în viață: să devină milionar din crypto până la 25 de ani și să dea skip la orele de matematică.<img src="marian.avif" width="350" height="197" alt="marian crypto ferrari" class="marian-img" style="float:right; margin:10px 20px 0px 0px; border-radius:8px"></p>
+    <p>Pentru Marian, profesorul de mate de la școală vorbește într-o limbă dispărută, probabil latină veche amestecată cu hieroglife. <em style="color: #718096; font-style: italic;">"La ce-mi trebuie mie progresii aritmetice, domn' profesor, când eu fac day-trading pe Solana?"</em>, mormăia el în ultima bancă, în timp ce își dădea refresh la portofoliu.</p>
+    <p>Dar într-o marți blestemată, piața crypto s-a prăbușit, iar profesorul i-a trântit un simulator de BAC în față. Atunci Marian a realizat cruntul adevăr: <strong>Dacă nu înțelegi matematica, ești doar carne de tun pentru balene.</strong> Iată 2 lecții dure prin care Marian a descoperit că materia de BAC este, de fapt, manualul secret al traderilor de succes.</p>
+    <h3 style="color: #2c7a7b; font-size: 1.4rem; margin-top: 25px; border-left: 4px solid #319795; padding-left: 10px;">Lecția 1: Progresiile Geometrice</h3>
+    <p>Marian a auzit că Bitcoin se "minează" și că primești recompense în crypto dacă pui un calculator să rezolve niște ecuații. Așa că a legat laptopul vechi al bunicii și s-a pus pe minat. După trei zile, singurul lucru pe care l-a minat a fost factura de la energie electrică de l-a fugărit maică-sa prin casă cu mătura.</p>
+    <p>Ce nu știa? Că dificultatea de minare a Bitcoin-ului crește conform unei progresii geometrice cu rație uriașă. <strong>Matematica de BAC explică:</strong> Formula termenului general a unei progresii geometrice este <span style="font-family: 'Courier New', Courier, monospace; background: #edf2f7; padding: 2px 6px; border-radius: 4px; color: #c53030; font-weight: bold;">b_n = b_1 * q^(n-1)</span>. În lumea Bitcoin, rația (<span style="font-family: 'Courier New', Courier, monospace; background: #edf2f7; padding: 2px 6px; border-radius: 4px; color: #c53030; font-weight: bold;">q</span>) reprezintă puterea totală a rețelei globale. Când mii de supercalculatoare din Islanda și Texas intră în rețea, puterea necesară crește exponențial. Laptopul bunicii încerca să rezolve o progresie geometrică unde el era un biet <span style="font-family: 'Courier New', Courier, monospace; background: #edf2f7; padding: 2px 6px; border-radius: 4px; color: #c53030; font-weight: bold;">b_1</span> microscopic, în timp ce rețeaua era deja la <span style="font-family: 'Courier New', Courier, monospace; background: #edf2f7; padding: 2px 6px; border-radius: 4px; color: #c53030; font-weight: bold;">b_1000000</span>.</p>
+    <h3 style="color: #2c7a7b; font-size: 1.4rem; margin-top: 25px; border-left: 4px solid #319795; padding-left: 10px;">Lecția 2: Probabilitățile și Analiza CVD</h3>
+    <p>Marian stătea pe site uitându-se la tabelul live cu prețul BTC și la Cumulative Volume Delta (CVD). Deodată, vede o lumânare uriașă roșie. O balenă (un trader cu portofoliu mare) tocmai a vândut masiv. Marian s-a panicat și a vândut și el, crezând că Bitcoin se duce la zero. Două minute mai târziu, prețul a explodat în sus, iar Marian a rămas pe tușă, privind cu lacrimi în ochi cum balena i-a cumpărat monedele la preț de nimic.</p>
+    <div style="background-color: #f0fff4; border-left: 4px solid #38a169; padding: 15px; margin: 15px 0; border-radius: 0 8px 8px 0; color: #22543d;">
+        <strong>Cum l-au salvat Elementele de Combinatorică și Probabilitățile?</strong><br>
+        Dacă Marian ar fi fost atent la lecția de combinatorică și probabilități (clasa a X-a), ar fi calculat că o balenă nu vinde ca să distrugă piața, ci ca să provoace panică (lichidare). Probabilitatea că piața să își revină după o manipulare rapidă este de peste 85%. Balena știa matematică și statistică; Marian știa doar să dea Panic Sell.
+    </div>
+    <p><strong>Epilog: Cum a luat Marian 9 la BAC și a făcut profit</strong><br>
+    După ce a înțeles că graficele din crypto sunt doar funcții injective, surjective pe care le învăța la școală, Marian a avut o revelație. A lăsat TikTok-ul și s-a apucat de <a href="https://meditatii-romania.com/anunturi/matematica" style="display: block; width: fit-content; margin: 25px auto 0 auto; background-color: #238636; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px; text-align: center; border: none; cursor: pointer;">meditații matematică BAC</a><br>Nu doar că a luat nota 9 (spre șocul profesorului), dar acum știe și cum să își seteze un Stop-Loss, cum să calculeze riscul ponderat și cum să nu mai fie păcălit de algoritmi.</p>
+</div>
+<h2>📊 Monitorizare Crypto &#238;n Timp Real</h2>
+<div class="instruction">&#128161; <strong>Volum</strong>: verde = peste media zilnic&#259; 30z. <strong>Direc&#539;ie</strong>: CVD ponderat cu volumul. Linia 2 = USD cump&#259;rat vs v&#226;ndut. <strong>&#128051;</strong> = trade-uri peste $50K.</div>
+<div class="mobile-sort">
+<label for="mobile-sort-select">Sortare:</label>
+<select id="mobile-sort-select">
+<option value="rank"># (Rank)</option>
+<option value="name">Nume</option>
+<option value="price">Pre&#539;</option>
+<option value="marketCap">Market Cap</option>
+<option value="volume24h">Volum 24h</option>
+<option value="volumeRatio">Volum vs medie 30z</option>
+<option value="cvd">Direc&#539;ie (CVD)</option>
+<option value="change">Varia&#539;ie Live</option>
+<option value="change24h">Varia&#539;ie 24h</option>
+</select>
+<button class="dir-btn" id="mobile-sort-dir" title="Inverseaz&#259; direc&#539;ia">&#8597;</button>
+</div>
+<div class="table-container">
+<table>
+<colgroup>
+<col style="width:60px">
+<col style="width:190px">
+<col style="width:140px">
+<col style="width:155px">
+<col style="width:200px">
+<col style="width:200px">
+<col style="width:120px">
+<col style="width:120px">
+</colgroup>
+<thead>
+<tr>
+<th onclick="sortTable('rank')">#</th>
+<th onclick="sortTable('name')">Moned&#259;</th>
+<th onclick="sortTable('price')">Pre&#539; (USD)</th>
+<th onclick="sortTable('marketCap')">Market Cap (USD)</th>
+<th onclick="sortTable('volume24h')">Volum 24h / medie 30z</th>
+<th onclick="sortTable('cvd')">Direc&#539;ie cump./v&#226;nd. (CVD)</th>
+<th onclick="sortTable('change')">Var. Live (%)</th>
+<th onclick="sortTable('change24h')">Var. 24h (%)</th>
+</tr>
+</thead>
+<tbody id="crypto-table-body"></tbody>
+</table>
+</div>
+<script>
+const WHALE_THRESHOLD=50000;
+const cryptoList=[
+{symbol:'BTC',name:'Bitcoin',geckoId:'bitcoin'},
+{symbol:'ETH',name:'Ethereum',geckoId:'ethereum'},
+{symbol:'SOL',name:'Solana',geckoId:'solana'},
+{symbol:'XRP',name:'Ripple',geckoId:'ripple'},
+{symbol:'ADA',name:'Cardano',geckoId:'cardano'},
+{symbol:'AVAX',name:'Avalanche',geckoId:'avalanche-2'},
+{symbol:'DOT',name:'Polkadot',geckoId:'polkadot'},
+{symbol:'LINK',name:'Chainlink',geckoId:'chainlink'},
+{symbol:'BCH',name:'Bitcoin Cash',geckoId:'bitcoin-cash'},
+{symbol:'NEAR',name:'NEAR Protocol',geckoId:'near'},
+{symbol:'LTC',name:'Litecoin',geckoId:'litecoin'},
+{symbol:'UNI',name:'Uniswap',geckoId:'uniswap'},
+{symbol:'ICP',name:'Internet Computer',geckoId:'internet-computer'},
+{symbol:'AAVE',name:'Aave',geckoId:'aave'},
+{symbol:'ALGO',name:'Algorand',geckoId:'algorand'},
+{symbol:'ATOM',name:'Cosmos',geckoId:'cosmos'},
+{symbol:'DOGE',name:'Dogecoin',geckoId:'dogecoin'},
+{symbol:'ETC',name:'Ethereum Classic',geckoId:'ethereum-classic'},
+{symbol:'FET',name:'Fetch.ai',geckoId:'fetch-ai'},
+{symbol:'INJ',name:'Injective',geckoId:'injective-protocol'},
+{symbol:'POL',name:'Polygon',geckoId:'polygon-ecosystem-token',iconSymbol:'matic'},
+{symbol:'QNT',name:'Quant',geckoId:'quant-network'},
+{symbol:'RENDER',name:'Render',geckoId:'render-token',iconSymbol:'rndr'},
+{symbol:'SUI',name:'Sui',geckoId:'sui'},
+{symbol:'XLM',name:'Stellar Lumens',geckoId:'stellar'},
+{symbol:'ZEC',name:'Zcash',geckoId:'zcash'},
+{symbol:'MANA',name:'Decentraland',geckoId:'decentraland'},
+{symbol:'SUSHI',name:'SushiSwap',geckoId:'sushi'},
+{symbol:'CRO',name:'Cronos',geckoId:'crypto-com-chain'},
+{symbol:'DASH',name:'Dash',geckoId:'dash'}
+];
+const cryptoData={};
+const rowRefs={};
+let currentSortKey='rank';
+let sortAscending=true;
+const tableBody=document.getElementById('crypto-table-body');
+cryptoList.forEach(c=>{
+cryptoData[c.symbol]={
+symbol:c.symbol,name:c.name,iconSymbol:(c.iconSymbol||c.symbol).toLowerCase(),
+image:'',price:0,change:0,change24h:0,initialPrice:null,marketCap:0,supply:null,
+volume24h:0,volumeRatio:0,buyVol:0,sellVol:0,cvd:0,whaleBuys:0,whaleSells:0,rank:999
+};
+});
+function formatPrice(value){
+if(value===0)return "Se \u00eencarc\u0103...";
+return `$${value.toLocaleString('en-US',{minimumFractionDigits:value<1?5:2,maximumFractionDigits:value<1?5:2})}`;
+}
+function formatBigNumber(value){
+if(!value||value<=0)return null;
+if(value>=1e12)return `$${(value/1e12).toFixed(3)}T`;
+if(value>=1e9)return `$${(value/1e9).toFixed(3)}B`;
+if(value>=1e6)return `$${(value/1e6).toFixed(2)}M`;
+if(value>=1e3)return `$${(value/1e3).toFixed(2)}K`;
+return `$${value.toFixed(2)}`;
+}
+function formatMarketCap(value){const s=formatBigNumber(value);return s||"Se \u00eencarc\u0103...";}
+function formatChange(value){
+if(value>0)return{cls:'positive',text:`+${value.toFixed(2)}%`};
+if(value<0)return{cls:'negative',text:`${value.toFixed(2)}%`};
+return{cls:'neutral',text:'0.00%'};
+}
+function recomputeRanks(){
+const arr=Object.values(cryptoData);
+arr.sort((a,b)=>b.marketCap-a.marketCap);
+arr.forEach((c,i)=>{c.rank=c.marketCap>0?(i+1):999;});
+}
+function comparator(a,b){
+const valA=a[currentSortKey];
+const valB=b[currentSortKey];
+if(typeof valA==='string')return sortAscending?valA.localeCompare(valB):valB.localeCompare(valA);
+return sortAscending?valA-valB:valB-valA;
+}
+function buildTable(){
+tableBody.innerHTML='';
+Object.keys(rowRefs).forEach(k=>delete rowRefs[k]);
+cryptoList.forEach(c=>{
+const crypto=cryptoData[c.symbol];
+const fallbackIcon=`https://cdn.jsdelivr.net/npm/cryptocurrency-icons@0.18.1/svg/color/${crypto.iconSymbol}.svg`;
+const row=document.createElement('tr');
+row.dataset.symbol=c.symbol;
+row.innerHTML=`
+<td class="rank td-rank" data-label="#">&mdash;</td>
+<td class="td-crypto"><div class="crypto-container"><div class="crypto-icon-wrap"><img class="crypto-icon" src="${fallbackIcon}" alt="${c.symbol}" onerror="this.onerror=null;this.src='${fallbackIcon}'"></div><span class="crypto-name">${c.name}</span></div></td>
+<td class="cell-price num" data-label="Pre&#539;">Se \u00eencarc\u0103...</td>
+<td class="cell-marketcap num" data-label="Market Cap">Se \u00eencarc\u0103...</td>
+<td class="cell-volume num" data-label="Volum 24h">Se \u00eencarc\u0103...</td>
+<td class="cell-cvd cvd-cell" data-label="Direc&#539;ie"><span class="badge badge-cvd-neutral">&plusmn;0%</span></td>
+<td class="cell-change neutral num" data-label="Varia&#539;ie Live">0.00%</td>
+<td class="cell-change24h neutral num" data-label="Varia&#539;ie 24h">0.00%</td>`;
+tableBody.appendChild(row);
+rowRefs[c.symbol]={
+row:row,rank:row.querySelector('.rank'),price:row.querySelector('.cell-price'),
+marketCap:row.querySelector('.cell-marketcap'),volume:row.querySelector('.cell-volume'),
+cvd:row.querySelector('.cell-cvd'),change:row.querySelector('.cell-change'),
+change24h:row.querySelector('.cell-change24h'),icon:row.querySelector('.crypto-icon')
+};
+});
+}
+function renderVolumeCell(el,crypto){
+const vol=formatBigNumber(crypto.volume24h);
+if(!vol){el.textContent="Se \u00eencarc\u0103...";return;}
+let badgeHtml='';
+if(crypto.volumeRatio!==0){
+const pct=crypto.volumeRatio;
+const isAbove=pct>0;
+const arrow=isAbove?'\u25B2':'\u25BC';
+const cls=isAbove?'badge-vol-high':'badge-vol-low';
+const sign=isAbove?'+':'';
+badgeHtml=`<span class="badge ${cls}">${arrow} ${sign}${pct.toFixed(1)}%</span>`;
+}
+el.innerHTML=`<span class="vol-main">${vol}</span>${badgeHtml}`;
+}
+function renderCvdCell(el,crypto){
+const total=crypto.buyVol+crypto.sellVol;
+if(total<1000){el.innerHTML=`<span class="badge badge-cvd-neutral">&plusmn;0%</span>`;return;}
+const cvd=crypto.cvd;
+const abs=Math.abs(cvd).toFixed(1);
+let cls,arrow,sign;
+if(cvd>5){cls='badge-cvd-buy';arrow='\u25B2';sign='+';}
+else if(cvd<-5){cls='badge-cvd-sell';arrow='\u25BC';sign='';}
+else{cls='badge-cvd-neutral';arrow='\u00B1';sign=cvd>=0?'+':'';}
+const buyStr=formatBigNumber(crypto.buyVol)||'$0';
+const sellStr=formatBigNumber(crypto.sellVol)||'$0';
+const detail=`<div class="cvd-detail"><span class="buy">\u2191 ${buyStr}</span><span class="sep">/</span><span class="sell">\u2193 ${sellStr}</span></div>`;
+let whaleLine='';
+if(crypto.whaleBuys>0||crypto.whaleSells>0){
+const wb=crypto.whaleBuys>0?`<span class="wb">${crypto.whaleBuys}C</span>`:'';
+const ws=crypto.whaleSells>0?`<span class="ws">${crypto.whaleSells}V</span>`:'';
+const sep=(crypto.whaleBuys>0&&crypto.whaleSells>0)?' / ':'';
+whaleLine=`<div class="whale-line">\u{1F40B} ${wb}${sep}${ws}</div>`;
+}
+el.innerHTML=`<span class="badge ${cls}">${arrow} ${sign}${abs}%</span>${detail}${whaleLine}`;
+}
+function updateTable(){
+recomputeRanks();
+for(const sym in cryptoData){
+const c=cryptoData[sym];
+const r=rowRefs[sym];
+if(!r)continue;
+r.rank.textContent=c.rank===999?'\u2014':c.rank;
+r.price.textContent=formatPrice(c.price);
+r.marketCap.textContent=formatMarketCap(c.marketCap);
+renderVolumeCell(r.volume,c);
+renderCvdCell(r.cvd,c);
+const live=formatChange(c.change);
+r.change.textContent=live.text;
+r.change.className='cell-change num '+live.cls;
+const d24=formatChange(c.change24h);
+r.change24h.textContent=d24.text;
+r.change24h.className='cell-change24h num '+d24.cls;
+if(c.image&&r.icon.getAttribute('data-cg')!=='1'){
+r.icon.src=c.image;
+r.icon.setAttribute('data-cg','1');
+}
+}
+const sorted=Object.values(cryptoData).sort(comparator);
+let prev=null;
+sorted.forEach(c=>{
+const row=rowRefs[c.symbol]?.row;
+if(!row)return;
+if(!prev){
+if(tableBody.firstElementChild!==row)tableBody.insertBefore(row,tableBody.firstElementChild);
+}else if(prev.nextElementSibling!==row){
+tableBody.insertBefore(row,prev.nextElementSibling);
+}
+prev=row;
+});
+}
+let updateScheduled=false;
+function scheduleUpdate(){
+if(!updateScheduled){
+updateScheduled=true;
+requestAnimationFrame(()=>{updateScheduled=false;updateTable();});
+}
+}
+function sortTable(key){
+if(currentSortKey===key)sortAscending=!sortAscending;
+else{currentSortKey=key;sortAscending=(key==='rank'||key==='name');}
+const sel=document.getElementById('mobile-sort-select');
+if(sel&&['rank','name','price','marketCap','volume24h','volumeRatio','cvd','change','change24h'].includes(key))sel.value=key;
+scheduleUpdate();
+}
+document.getElementById('mobile-sort-select').addEventListener('change',e=>{
+const key=e.target.value;
+if(currentSortKey===key)sortAscending=!sortAscending;
+else{currentSortKey=key;sortAscending=(key==='rank'||key==='name');}
+scheduleUpdate();
+});
+document.getElementById('mobile-sort-dir').addEventListener('click',()=>{sortAscending=!sortAscending;scheduleUpdate();});
+async function fetchSupplies(){
+const ids=cryptoList.map(c=>c.geckoId).filter(Boolean).join(',');
+if(!ids)return;
+try{
+const url=`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${encodeURIComponent(ids)}&per_page=250&page=1`;
+const res=await fetch(url);
+if(!res.ok)throw new Error(`HTTP ${res.status}`);
+const json=await res.json();
+const byId={};
+json.forEach(item=>{byId[item.id]=item;});
+cryptoList.forEach(c=>{
+const item=byId[c.geckoId];
+if(!item)return;
+const crypto=cryptoData[c.symbol];
+if(item.circulating_supply){
+crypto.supply=item.circulating_supply;
+if(crypto.price>0)crypto.marketCap=crypto.price*crypto.supply;
+else if(item.current_price)crypto.marketCap=item.market_cap||(item.current_price*crypto.supply);
+}
+if(item.image)crypto.image=item.image;
+});
+scheduleUpdate();
+}catch(err){console.warn("Eroare CoinGecko:",err);}
+}
+const productIds=cryptoList.map(c=>`${c.symbol}-USD`);
+const ws=new WebSocket('wss://ws-feed.exchange.coinbase.com');
+ws.onopen=()=>{
+ws.send(JSON.stringify({type:"subscribe",product_ids:productIds,channels:["ticker"]}));
+};
+ws.onmessage=event=>{
+const data=JSON.parse(event.data);
+if(data.type==="ticker"&&data.price){
+const symbol=data.product_id.split('-')[0];
+const currentPrice=parseFloat(data.price);
+const crypto=cryptoData[symbol];
+if(!crypto)return;
+if(crypto.initialPrice===null)crypto.initialPrice=currentPrice;
+crypto.price=currentPrice;
+crypto.change=((currentPrice-crypto.initialPrice)/crypto.initialPrice)*100;
+const open24h=parseFloat(data.open_24h);
+if(open24h>0)crypto.change24h=((currentPrice-open24h)/open24h)*100;
+if(crypto.supply)crypto.marketCap=currentPrice*crypto.supply;
+const vol24hBase=parseFloat(data.volume_24h);
+const vol30dBase=parseFloat(data.volume_30d);
+if(vol24hBase>0)crypto.volume24h=vol24hBase*currentPrice;
+if(vol24hBase>0&&vol30dBase>0){
+const avgDaily=vol30dBase/30;
+crypto.volumeRatio=(vol24hBase/avgDaily-1)*100;
+}
+const lastSize=parseFloat(data.last_size);
+const side=data.side;
+if(lastSize>0&&(side==='buy'||side==='sell')){
+const tradeValue=lastSize*currentPrice;
+if(side==='buy'){
+crypto.buyVol+=tradeValue;
+if(tradeValue>=WHALE_THRESHOLD)crypto.whaleBuys++;
+}else{
+crypto.sellVol+=tradeValue;
+if(tradeValue>=WHALE_THRESHOLD)crypto.whaleSells++;
+}
+const total=crypto.buyVol+crypto.sellVol;
+if(total>0)crypto.cvd=((crypto.buyVol-crypto.sellVol)/total)*100;
+}
+scheduleUpdate();
+}
+};
+ws.onerror=error=>console.error("Eroare WebSocket:",error);
+ws.onclose=()=>setTimeout(()=>window.location.reload(),5000);
+buildTable();
+updateTable();
+fetchSupplies();
+setInterval(fetchSupplies,5*60*1000);
+</script>
+</body>
+</html>
